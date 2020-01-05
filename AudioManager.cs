@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
@@ -16,6 +17,12 @@ namespace Subtegral.AudioUtility
         private static AudioManager instance;
         private AudioBus masterBus;
 
+        private void Awake()
+        {
+            if (instance == null)
+                instance = this;
+        }
+
         public static AudioManager GetInstance()
         {
             if (instance != null) return instance;
@@ -24,7 +31,12 @@ namespace Subtegral.AudioUtility
             instance.audioPool.Add(instance.masterBus.Name,new Queue<AudioSource>());
             return instance;
         }
-        
+
+        public AudioManager AddBus(AudioBus bus)
+        {
+            instance.audioPool.Add(bus.Name,new Queue<AudioSource>());
+            return instance;
+        }
 
         public AudioManager SetPoolSize(int poolSize)
         {
